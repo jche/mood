@@ -21,8 +21,10 @@ daylio <- daylio_raw %>%
          year = year(date),
          month = month(date),
          day = day(date),
-         wday = weekday,
-         mood = factor(mood, levels=c("awful", "bad", "meh", "good", "rad"))) %>%
+         wday = wday(date),
+         mood = mood %>% 
+           factor(levels=c("awful", "bad", "meh", "good", "rad")) %>% 
+           as.numeric()) %>%
   # process activities column
   separate_longer_delim(activities, "|") %>% 
   mutate(activities = trimws(activities),
@@ -67,7 +69,8 @@ discover <- discover_raw %>%
          year = year(date),
          month = month(date),
          day = day(date),
-         wday = wday(date)) %>% 
+         wday = wday(date),
+         amount = -Amount) %>%    # discover flips credit/payment
   select(date, year, month, day, wday, 
-         category=Category, amount=Amount)
+         category=Category, amount)
 
